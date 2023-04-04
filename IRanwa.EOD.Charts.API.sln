@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRanwa.EOD.Chart.Model", "I
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Jobs", "Jobs", "{9764325B-B590-4A68-BBC8-41DCC4354E64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRanwa.EOD.Charts.Jobs.SyncData", "IRanwa.EOD.Charts.Jobs.SyncData\IRanwa.EOD.Charts.Jobs.SyncData.csproj", "{467687B5-A54D-43CA-8A35-6A20665E8CFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,9 +43,16 @@ Global
 		{E23C57F8-D702-45D4-9E04-30BDCD69C8BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E23C57F8-D702-45D4-9E04-30BDCD69C8BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E23C57F8-D702-45D4-9E04-30BDCD69C8BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{467687B5-A54D-43CA-8A35-6A20665E8CFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{467687B5-A54D-43CA-8A35-6A20665E8CFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{467687B5-A54D-43CA-8A35-6A20665E8CFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{467687B5-A54D-43CA-8A35-6A20665E8CFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{467687B5-A54D-43CA-8A35-6A20665E8CFF} = {9764325B-B590-4A68-BBC8-41DCC4354E64}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E0E27AD2-1F5B-4438-90C2-1880960BE7BA}
