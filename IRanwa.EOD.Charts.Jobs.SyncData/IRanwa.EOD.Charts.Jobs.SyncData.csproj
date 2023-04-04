@@ -21,6 +21,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="4.0.30">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IRanwa.EOD.Chart.Business\IRanwa.EOD.Chart.Business.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.Debug.json">
       <DependentUpon>appsettings.json</DependentUpon>
       <IsTransformFile>true</IsTransformFile>

@@ -20,13 +20,17 @@ public class Application
             var exchangeCodes = exchangeService.GetExchangeCodesAsync().Result;
             foreach(var code in exchangeCodes)
             {
+                Console.WriteLine($"symbols sync started {code.Code}");
                 try
                 {
-                    var symbols = exchangeService.GetExchangeSymbolsAsync(code.Code, null);
-                }catch(Exception ex)
-                {
-                    Console.WriteLine($"symbols sync failed {ex.ToString()}");
+                    var symbols = exchangeService.GetExchangeSymbolsAsync(code.Code, null).Result;
+                    Console.WriteLine($"symbols sync ended {code.Code} {symbols}");
                 }
+                catch(Exception ex)
+                {
+                    Console.WriteLine($"symbols sync failed {code.Code} : {ex.ToString()}");
+                }
+                
             }
             Console.WriteLine("Application run ended");
         }
