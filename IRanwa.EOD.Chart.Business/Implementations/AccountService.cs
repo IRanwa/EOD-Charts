@@ -117,7 +117,7 @@ public class AccountService : IAccountService
         new AspNetEmailVerifications()
         {
             Email = user.Email,
-            ExpireDateTime = DateTime.UtcNow.AddDays(int.Parse(configuration["MailSettings:EmailVerificationExpireInDays"])),
+            ExpireDateTime = DateTime.UtcNow.AddMinutes(int.Parse(configuration["MailSettings:EmailVerificationExpireInMins"])),
             UserId = applicationUser.Id,
             Code = code,
             IsActive = true
@@ -445,7 +445,7 @@ public class AccountService : IAccountService
         new AspNetEmailVerifications()
         {
             Email = applicationUser.Email,
-            ExpireDateTime = DateTime.UtcNow.AddDays(int.Parse(configuration["MailSettings:EmailVerificationExpireInDays"])),
+            ExpireDateTime = DateTime.UtcNow.AddMinutes(int.Parse(configuration["MailSettings:EmailVerificationExpireInMins"])),
             UserId = applicationUser.Id,
             Code = code,
             IsActive = true
