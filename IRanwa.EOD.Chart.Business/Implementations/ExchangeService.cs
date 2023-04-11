@@ -76,7 +76,7 @@ public class ExchangeService : IExchangeService
                 Name = symbol.Name,
                 ExchangeCode = symbol.ExchangeCodeModel.Code,
                 Exchange = symbol.Exchange,
-                Country = symbol.Country,
+                Country = symbol.ExchangeCodeModel.Country,
                 Currency = symbol.Currency,
                 Type = symbol.Type
             });
