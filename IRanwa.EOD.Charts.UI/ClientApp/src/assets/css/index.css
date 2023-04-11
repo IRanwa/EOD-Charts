@@ -107,6 +107,7 @@ body {
     padding: 3px 10px;
     cursor: pointer;
     border: 0.5px solid var(--light-gray-1);
+    height: fit-content;
 }
 
 .custom-radio-btn-2 {

@@ -296,8 +296,11 @@ public class StockDataService : IStockDataService
                 currentPropInfo.SetValue(finalDataModel, new Dictionary<string, string> { { record.Date, data } }, null);
             else
             {
-                currentData.Add(record.Date, data);
-                currentPropInfo.SetValue(finalDataModel, currentData, null);
+                if (!currentData.Keys.Contains(record.Date))
+                {
+                    currentData.Add(record.Date, data);
+                    currentPropInfo.SetValue(finalDataModel, currentData, null);
+                }
             }
         }
     }

@@ -860,15 +860,22 @@ export class LiveData extends Component {
             if (this.state.viewDisplayLayoutType === ChartGridTypes.Grid1 || this.state.viewDisplayLayoutType === ChartGridTypes.Grid2Horizontal) {
                 height = '100vh';
                 reduceHeight = "11em";
-            }
+            } 
         }
         if (this.state.viewDisplayLayoutType !== null) {
-            if (this.state.viewDisplayLayoutType === ChartGridTypes.Grid2Horizontal || this.state.viewDisplayLayoutType === ChartGridTypes.Grid4Horizontal ||
-                this.state.viewDisplayLayoutType === ChartGridTypes.Grid6 || this.state.viewDisplayLayoutType === ChartGridTypes.Grid8) {
+            if (this.state.viewDisplayLayoutType === ChartGridTypes.Grid2Horizontal || this.state.viewDisplayLayoutType === ChartGridTypes.Grid4Horizontal) {
                 width = "50%";
+            } else if (this.state.viewDisplayLayoutType === ChartGridTypes.Grid6) {
+                width = `${100 / 3}%`;
+            } else if (this.state.viewDisplayLayoutType === ChartGridTypes.Grid8) {
+                width = `${100 / 4}%`;
             }
         }
 
+        let lineBreak = false;
+        if (parseInt(width.replace("%","")) < 50) {
+            lineBreak = true;
+        }
         
         return (
             <ScreenLoaderModal loading={this.state.screenLoading}>
@@ -886,29 +893,34 @@ export class LiveData extends Component {
                                 return (
                                     <Col flex={`${width}`} key={index} className={divName}>
                                         <div className="row single-chart-top-nav">
-                                            <div className="col-md-6 col-sm-12">
-                                                <Button className="btn-custom m-0 btn-square" onClick={() => this.toggleSymbolModal(true, index)}>{symbol}</Button>
-
-                                                <span className="margin-left-10">
-                                                    <span className={`custom-radio-btn-2 ${frequencyDaySelected}`}
-                                                        onClick={() => this.frequencyOnChange(FrequencyTypes.Daily, index)}>
-                                                        <span>1D</span>
+                                            <div className="col-md-9 col-sm-12 col-xs-12">
+                                                <span >
+                                                    <span >
+                                                        <Button className="btn-custom m-0 btn-square" onClick={() => this.toggleSymbolModal(true, index)}>{symbol}</Button>
                                                     </span>
-                                                </span>
-                                                <span>
-                                                    <span className={`custom-radio-btn-2 ${frequencyWeekSelected}`}
-                                                        onClick={() => this.frequencyOnChange(FrequencyTypes.Weekly, index)}>
-                                                        <span>1W</span>
-                                                    </span>
-                                                </span>
-                                                <span>
-                                                    <span className={`custom-radio-btn-2 ${frequencyMonthlySelected}`}
-                                                        onClick={() => this.frequencyOnChange(FrequencyTypes.Monthly, index)}>
-                                                        <span>1M</span>
+                                                    <span style={{ alignSelf: lineBreak? 'center':'' }}>
+                                                        <span className="">
+                                                            <span className={`custom-radio-btn-2 ${frequencyDaySelected}`}
+                                                                onClick={() => this.frequencyOnChange(FrequencyTypes.Daily, index)}>
+                                                                <span>1D</span>
+                                                            </span>
+                                                        </span>
+                                                        <span>
+                                                            <span className={`custom-radio-btn-2 ${frequencyWeekSelected}`}
+                                                                onClick={() => this.frequencyOnChange(FrequencyTypes.Weekly, index)}>
+                                                                <span>1W</span>
+                                                            </span>
+                                                        </span>
+                                                        <span>
+                                                            <span className={`custom-radio-btn-2 ${frequencyMonthlySelected}`}
+                                                                onClick={() => this.frequencyOnChange(FrequencyTypes.Monthly, index)}>
+                                                                <span>1M</span>
+                                                            </span>
+                                                        </span>
                                                     </span>
                                                 </span>
                                             </div>
-                                            <div className="col-md-6  col-sm-12 d-flex justify-content-end custom-radio-btn-group">
+                                            <div className='col-md-3 d-flex justify-content-end custom-radio-btn-group'>
                                                 <div className={`custom-radio-btn flex-size-1 custom-radio-btn-left-side ${historicalDataSelected}`}
                                                     onClick={() => this.setIsLiveData(false, index)}>
                                                     <span>Historical</span>
@@ -921,8 +933,7 @@ export class LiveData extends Component {
                                             </div>
                                         </div>
                                         <div id={divName} style={{ width: "100%", height: `calc(${height} - ${reduceHeight})` }} />
-                                        <div className="stock-chart-display-values">
-                                        </div>
+                                        <span className="stock-chart-display-values"/>
                                     </Col>
                                 )
                             })
