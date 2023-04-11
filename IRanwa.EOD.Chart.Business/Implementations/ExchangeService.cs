@@ -125,11 +125,14 @@ public class ExchangeService : IExchangeService
     /// </returns>
     public List<SymbolsModel> GetAllExchangeSymbols(StockTypes? type, int currentSymbolsPage, string searchKeyword)
     {
+        if(searchKeyword != null)
+            searchKeyword = searchKeyword.ToLower();
         var exchangeSymbols = unitOfWorkAsync.GetGenericRepository<ExchangeSymbol>()
             .GetQueryable(x=> 
             (type == null || x.Type == type.GetEnumDisplayName()) && 
-            (string.IsNullOrEmpty(searchKeyword) || x.Name.Contains(searchKeyword) || x.Code.Contains(searchKeyword) 
-            || x.Exchange.Contains(searchKeyword) || x.ExchangeCodeModel.Code.Contains(searchKeyword) || x.Country.Contains(searchKeyword)), 
+            (string.IsNullOrEmpty(searchKeyword) || x.Name.ToLower().Contains(searchKeyword) || x.Code.ToLower().Contains(searchKeyword) 
+            || x.Exchange.ToLower().Contains(searchKeyword) || x.ExchangeCodeModel.Code.ToLower().Contains(searchKeyword)
+            || x.ExchangeCodeModel.Name.ToLower().Contains(searchKeyword) || x.Country.ToLower().Contains(searchKeyword)), 
             null)
             .Skip((currentSymbolsPage - 1) * 3)
             .Take(30)
