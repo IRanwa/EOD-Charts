@@ -568,4 +568,39 @@ public class StockDataHelperService : IStockDataHelperService
         }
         unitOfWorkAsync.SaveChanges();
     }
+
+    /// <summary>
+    /// Gets the total eps per year data.
+    /// </summary>
+    /// <param name="epsDataModels">The eps data models.</param>
+    /// <param name="date">The date.</param>
+    /// <param name="period">The period.</param>
+    /// <returns>Returns TTM eps data.</returns>
+    public double? GetTotalEPSPerYearData(List<EPSModel> epsDataModels, string date, PeriodTypes period)
+    {
+        var originalDate = DateTime.Parse(date);
+        var currentDate = DateTime.Parse(date);
+        if (period == PeriodTypes.Quarterly)
+        {
+            var epsList = epsDataModels.Where(eps =>
+            DateTime.ParseExact(eps.Date, "yyyy-MM-dd",
+            CultureInfo.InvariantCulture).ToString("yyyy") == currentDate.ToString("yyyy"));
+
+            var epsSumValue = 0.0;
+            foreach(var eps in epsList)
+                if(eps.EpsActual != null)
+                    epsSumValue +=  (double)eps.EpsActual;
+            if (epsSumValue > 0)
+                return epsSumValue;
+        }
+        else
+        {
+            var epsData = epsDataModels.FirstOrDefault(eps =>
+            DateTime.ParseExact(eps.Date, "yyyy-MM-dd",
+            CultureInfo.InvariantCulture).ToString("yyyy") == currentDate.ToString("yyyy"));
+            if(epsData != null)
+                return epsData.EpsActual;
+        }
+        return null;
+    }
 }

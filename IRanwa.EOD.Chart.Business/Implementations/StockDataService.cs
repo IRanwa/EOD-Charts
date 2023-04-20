@@ -122,7 +122,7 @@ public class StockDataService : IStockDataService
             var peRatios = CalculatePERatio(dates, eodData, epsData, period);
             var pbRatios = CalculatePBRatio(dates, balanceSheetData, eodData, outstandingData, period);
             var currentRatios = CalculateCurrentRatio(dates, balanceSheetData, period);
-            var priceToSales = CalculatePriceToSales(dates, incomeStatement, outstandingData, eodData, period);
+            var priceToSales = CalculatePriceToSales(dates, incomeStatement, outstandingData, eodData, epsData, period);
             var evEBITDAData = CalculateEvEBITDA(dates, marketCapData, balanceSheetData, incomeStatement, period);
             var evSalesData = CalculateEvSales(dates, marketCapData, balanceSheetData, incomeStatement, period);
             var evOpeningCashFlowData = CalculateEvOpeningCashFlow(dates, marketCapData, balanceSheetData, cashFlow, period);
@@ -414,10 +414,10 @@ public class StockDataService : IStockDataService
             var eodData = stockDataHelperService.GetEODData(eodDataModels, date, period);
             if (eodData != null && eodData.Adjusted_Close != null)
             {
-                EPSModel epsData = stockDataHelperService.GetEPSData(epsDataModels, date, period);
-                if (epsData != null && epsData.EpsActual != null)
+                double? epsValue = stockDataHelperService.GetTotalEPSPerYearData(epsDataModels, date, period);
+                if (epsValue != null)
                 {
-                    peRatioData.Add(date, (double)(eodData.Adjusted_Close / epsData.EpsActual));
+                    peRatioData.Add(date, (double)(eodData.Adjusted_Close / epsValue));
                     continue;
                 }
             }
@@ -497,10 +497,11 @@ public class StockDataService : IStockDataService
     /// <param name="incomeStatementModels">The income statement models.</param>
     /// <param name="outstandingDataModels">The outstanding data models.</param>
     /// <param name="eodDataModels">The eod data models.</param>
+    /// <param name="epsDataModels">The eps data models.</param>
     /// <param name="period">The period.</param>
     /// <returns>Returns calculate price to sales.</returns>
     private Dictionary<string, double> CalculatePriceToSales(List<string> dates, List<IncomeStatementModel> incomeStatementModels,
-        List<OutstandingSharesModel> outstandingDataModels, List<EODDataModel> eodDataModels, PeriodTypes period)
+        List<OutstandingSharesModel> outstandingDataModels, List<EODDataModel> eodDataModels, List<EPSModel> epsDataModels, PeriodTypes period)
     {
         var priceToSalesData = new Dictionary<string, double>();
         foreach (var date in dates)
@@ -512,7 +513,8 @@ public class StockDataService : IStockDataService
                     date, period);
                 OutstandingSharesModel outstandingShareData = stockDataHelperService.GetOutstandingSharesData(outstandingDataModels,
                     date, period);
-                if (incomeStatementData != null && incomeStatementData.TotalRevenue != null && outstandingShareData != null && outstandingShareData.Shares != null)
+                if (incomeStatementData != null && incomeStatementData.TotalRevenue != null && outstandingShareData != null 
+                    && outstandingShareData.Shares != null)
                 {
                     priceToSalesData.Add(date, (double)(
                         eodData.Adjusted_Close / (incomeStatementData.TotalRevenue / outstandingShareData.Shares))
@@ -713,7 +715,7 @@ public class StockDataService : IStockDataService
             CashFlowModel cashFlowData = stockDataHelperService.GetCashFlow(cashFlowModels, date, period);
             if (incomeStatementData != null && cashFlowData != null && cashFlowData.DividendsPaid != null && incomeStatementData.NetIncome != null)
             {
-                payoutRatioData.Add(date, (double)(cashFlowData.DividendsPaid / incomeStatementData.NetIncome));
+                payoutRatioData.Add(date, ((double)(cashFlowData.DividendsPaid / incomeStatementData.NetIncome))*100);
                 continue;
             }
             payoutRatioData.Add(date, 0);
@@ -740,7 +742,7 @@ public class StockDataService : IStockDataService
             if (incomeStatementData != null && balanceSheetData != null && incomeStatementData.NetIncome != null &&
                 balanceSheetData.TotalStockholderEquity != null)
             {
-                roeData.Add(date, (double)(incomeStatementData.NetIncome / balanceSheetData.TotalStockholderEquity));
+                roeData.Add(date, ((double)(incomeStatementData.NetIncome / balanceSheetData.TotalStockholderEquity)) * 100);
                 continue;
             }
             roeData.Add(date, 0);
@@ -767,7 +769,7 @@ public class StockDataService : IStockDataService
             if (incomeStatementData != null && balanceSheetData != null && incomeStatementData.NetIncome != null &&
                 balanceSheetData.TotalAssets != null)
             {
-                roaData.Add(date, (double)(incomeStatementData.NetIncome / balanceSheetData.TotalAssets));
+                roaData.Add(date, ((double)(incomeStatementData.NetIncome / balanceSheetData.TotalAssets)) * 100);
                 continue;
             }
             roaData.Add(date, 0);
@@ -794,7 +796,7 @@ public class StockDataService : IStockDataService
             if (incomeStatementData != null && balanceSheetData != null && incomeStatementData.Ebit != null &&
                 balanceSheetData.TotalAssets != null && balanceSheetData.TotalCurrentAssets != null)
             {
-                roicData.Add(date, (double)(incomeStatementData.Ebit / (balanceSheetData.TotalAssets - balanceSheetData.TotalCurrentAssets)));
+                roicData.Add(date, ((double)(incomeStatementData.Ebit / (balanceSheetData.TotalAssets - balanceSheetData.TotalCurrentAssets))) * 100);
                 continue;
             }
             roicData.Add(date, 0);

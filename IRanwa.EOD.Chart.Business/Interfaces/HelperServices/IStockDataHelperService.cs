@@ -163,4 +163,13 @@ public interface IStockDataHelperService
     /// <param name="eodDataModel">The eod data model.</param>
     /// <param name="symbolId">The symbol identifier.</param>
     Task SyncEODLiveDataAsync(EODDataModel eodDataModel, int symbolId);
+
+    /// <summary>
+    /// Gets the total eps per year data.
+    /// </summary>
+    /// <param name="epsDataModels">The eps data models.</param>
+    /// <param name="date">The date.</param>
+    /// <param name="period">The period.</param>
+    /// <returns>Returns TTM eps value.</returns>
+    double? GetTotalEPSPerYearData(List<EPSModel> epsDataModels, string date, PeriodTypes period);
 }
