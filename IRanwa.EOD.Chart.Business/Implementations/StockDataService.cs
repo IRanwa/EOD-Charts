@@ -843,7 +843,7 @@ public class StockDataService : IStockDataService
             IncomeStatementModel incomeStatementData = stockDataHelperService.GetIncomeStatement(incomeStatementModels, date, period);
             if (incomeStatementData != null && incomeStatementData.GrossProfit != null && incomeStatementData.TotalRevenue != null)
             {
-                grossProfitMarginData.Add(date, (double)(incomeStatementData.GrossProfit / incomeStatementData.TotalRevenue));
+                grossProfitMarginData.Add(date, ((double)(incomeStatementData.GrossProfit / incomeStatementData.TotalRevenue))*100);
                 continue;
             }
             grossProfitMarginData.Add(date, 0);
@@ -872,7 +872,7 @@ public class StockDataService : IStockDataService
             if (outstandingSharesData != null && cashFlowData != null && cashFlowData.DividendsPaid != null &&
                 outstandingSharesData.Shares != null && eodData != null && eodData.Adjusted_Close != null)
             {
-                dividendYieldData.Add(date, (double)((cashFlowData.DividendsPaid / outstandingSharesData.Shares) / eodData.Adjusted_Close));
+                dividendYieldData.Add(date, ((double)((cashFlowData.DividendsPaid / outstandingSharesData.Shares) / eodData.Adjusted_Close))*100);
                 continue;
             }
             dividendYieldData.Add(date, 0);
@@ -1079,7 +1079,7 @@ public class StockDataService : IStockDataService
             IncomeStatementModel incomeStatementData = stockDataHelperService.GetIncomeStatement(incomeStatementModels, date, period);
             if (incomeStatementData != null && incomeStatementData.TotalRevenue != null && incomeStatementData.OperatingIncome != null)
             {
-                operatingProfileMarginData.Add(date, (double)(incomeStatementData.OperatingIncome / incomeStatementData.TotalRevenue));
+                operatingProfileMarginData.Add(date, ((double)(incomeStatementData.OperatingIncome / incomeStatementData.TotalRevenue))*100);
                 continue;
             }
             operatingProfileMarginData.Add(date, 0);
@@ -1156,7 +1156,7 @@ public class StockDataService : IStockDataService
             IncomeStatementModel incomeStatementData = stockDataHelperService.GetIncomeStatement(incomeStatementModels, date, period);
             if (incomeStatementData != null && incomeStatementData.Ebitda != null && incomeStatementData.TotalRevenue != null)
             {
-                ebitdaMarginData.Add(date, (double)(incomeStatementData.Ebitda / incomeStatementData.TotalRevenue));
+                ebitdaMarginData.Add(date, ((double)(incomeStatementData.Ebitda / incomeStatementData.TotalRevenue))*100);
                 continue;
             }
             ebitdaMarginData.Add(date, 0);
