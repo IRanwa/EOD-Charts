@@ -582,14 +582,14 @@ public class StockDataHelperService : IStockDataHelperService
         var currentDate = DateTime.Parse(date);
         if (period == PeriodTypes.Quarterly)
         {
-            var epsList = epsDataModels.Where(eps =>
-            DateTime.ParseExact(eps.Date, "yyyy-MM-dd",
-            CultureInfo.InvariantCulture).ToString("yyyy") == currentDate.ToString("yyyy"));
+            var startDate = currentDate.AddYears(-1);
+            var epsList = epsDataModels.Where(eps => DateTime.Parse(eps.Date) > startDate &&
+            DateTime.Parse(eps.Date) <= currentDate);
 
             var epsSumValue = 0.0;
-            foreach(var eps in epsList)
-                if(eps.EpsActual != null)
-                    epsSumValue +=  (double)eps.EpsActual;
+            foreach (var eps in epsList)
+                if (eps.EpsActual != null)
+                    epsSumValue += (double)eps.EpsActual;
             if (epsSumValue > 0)
                 return epsSumValue;
         }
@@ -598,7 +598,7 @@ public class StockDataHelperService : IStockDataHelperService
             var epsData = epsDataModels.FirstOrDefault(eps =>
             DateTime.ParseExact(eps.Date, "yyyy-MM-dd",
             CultureInfo.InvariantCulture).ToString("yyyy") == currentDate.ToString("yyyy"));
-            if(epsData != null)
+            if (epsData != null)
                 return epsData.EpsActual;
         }
         return null;
