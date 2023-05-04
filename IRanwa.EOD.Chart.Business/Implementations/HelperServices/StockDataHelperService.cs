@@ -603,4 +603,102 @@ public class StockDataHelperService : IStockDataHelperService
         }
         return null;
     }
+
+    /// <summary>
+    /// Gets the total revenue per year data.
+    /// </summary>
+    /// <param name="incomeStatementModels">The income statement models.</param>
+    /// <param name="date">The date.</param>
+    /// <param name="period">The period.</param>
+    /// <returns>Returns total revenue.</returns>
+    public double? GetTotalRevenuePerYearData(List<IncomeStatementModel> incomeStatementModels, string date, PeriodTypes period)
+    {
+        var originalDate = DateTime.Parse(date);
+        var currentDate = DateTime.Parse(date);
+        if (period == PeriodTypes.Quarterly)
+        {
+            var startDate = currentDate.AddYears(-1);
+            var incomeStatements = incomeStatementModels.Where(income => DateTime.Parse(income.Date) > startDate &&
+            DateTime.Parse(income.Date) <= currentDate);
+
+            var totalRevSum = 0.0;
+            foreach (var incomeStatement in incomeStatements)
+                if (incomeStatement.TotalRevenue != null)
+                    totalRevSum += (double)incomeStatement.TotalRevenue;
+            if (totalRevSum > 0)
+                return totalRevSum;
+        }
+        else
+        {
+            var incomeStatement = incomeStatementModels.FirstOrDefault(income =>
+            DateTime.ParseExact(income.Date, "yyyy-MM-dd",
+            CultureInfo.InvariantCulture).ToString("yyyy") == currentDate.ToString("yyyy"));
+            if (incomeStatement != null)
+                return incomeStatement.TotalRevenue;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Gets the total ebitda per year data.
+    /// </summary>
+    /// <param name="incomeStatementModels">The income statement models.</param>
+    /// <param name="date">The date.</param>
+    /// <param name="period">The period.</param>
+    /// <returns>Returns total ebitda.</returns>
+    public double? GetTotalEbitdaPerYearData(List<IncomeStatementModel> incomeStatementModels, string date, PeriodTypes period)
+    {
+        var originalDate = DateTime.Parse(date);
+        var currentDate = DateTime.Parse(date);
+        if (period == PeriodTypes.Quarterly)
+        {
+            var startDate = currentDate.AddYears(-1);
+            var incomeStatements = incomeStatementModels.Where(income => DateTime.Parse(income.Date) > startDate &&
+            DateTime.Parse(income.Date) <= currentDate);
+
+            var totalEbitda = 0.0;
+            foreach (var incomeStatement in incomeStatements)
+                if (incomeStatement.Ebitda != null)
+                    totalEbitda += (double)incomeStatement.Ebitda;
+            if (totalEbitda > 0)
+                return totalEbitda;
+        }
+        else
+        {
+            var incomeStatement = incomeStatementModels.FirstOrDefault(income =>
+            DateTime.ParseExact(income.Date, "yyyy-MM-dd",
+            CultureInfo.InvariantCulture).ToString("yyyy") == currentDate.ToString("yyyy"));
+            if (incomeStatement != null)
+                return incomeStatement.TotalRevenue;
+        }
+        return null;
+    }
+
+    public double? GetTotalCashFromOperatingActivitiesPerYearData(List<CashFlowModel> cashFlowModels, string date, PeriodTypes period)
+    {
+        var originalDate = DateTime.Parse(date);
+        var currentDate = DateTime.Parse(date);
+        if (period == PeriodTypes.Quarterly)
+        {
+            var startDate = currentDate.AddYears(-1);
+            var cashFlows = cashFlowModels.Where(cash => DateTime.Parse(cash.Date) > startDate &&
+            DateTime.Parse(cash.Date) <= currentDate);
+
+            var totalCashFromOperatingActivites = 0.0;
+            foreach (var cashFlow in cashFlows)
+                if (cashFlow.TotalCashFromOperatingActivities != null)
+                    totalCashFromOperatingActivites += (double)cashFlow.TotalCashFromOperatingActivities;
+            if (totalCashFromOperatingActivites > 0)
+                return totalCashFromOperatingActivites;
+        }
+        else
+        {
+            var cashFlow = cashFlowModels.FirstOrDefault(cash =>
+            DateTime.ParseExact(cash.Date, "yyyy-MM-dd",
+            CultureInfo.InvariantCulture).ToString("yyyy") == currentDate.ToString("yyyy"));
+            if (cashFlow != null)
+                return cashFlow.TotalCashFromOperatingActivities;
+        }
+        return null;
+    }
 }

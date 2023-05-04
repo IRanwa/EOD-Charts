@@ -172,4 +172,24 @@ public interface IStockDataHelperService
     /// <param name="period">The period.</param>
     /// <returns>Returns TTM eps value.</returns>
     double? GetTotalEPSPerYearData(List<EPSModel> epsDataModels, string date, PeriodTypes period);
+
+    /// <summary>
+    /// Gets the total revenue per year data.
+    /// </summary>
+    /// <param name="incomeStatementModels">The income statement models.</param>
+    /// <param name="date">The date.</param>
+    /// <param name="period">The period.</param>
+    /// <returns>Returns total revenue.</returns>
+    double? GetTotalRevenuePerYearData(List<IncomeStatementModel> incomeStatementModels, string date, PeriodTypes period);
+
+    /// <summary>
+    /// Gets the total ebitda per year data.
+    /// </summary>
+    /// <param name="incomeStatementModels">The income statement models.</param>
+    /// <param name="date">The date.</param>
+    /// <param name="period">The period.</param>
+    /// <returns>Returns total ebitda.</returns>
+    double? GetTotalEbitdaPerYearData(List<IncomeStatementModel> incomeStatementModels, string date, PeriodTypes period);
+
+    double? GetTotalCashFromOperatingActivitiesPerYearData(List<CashFlowModel> cashFlowModels, string date, PeriodTypes period);
 }
