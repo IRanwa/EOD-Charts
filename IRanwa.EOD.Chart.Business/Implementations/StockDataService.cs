@@ -509,15 +509,16 @@ public class StockDataService : IStockDataService
             var eodData = stockDataHelperService.GetEODData(eodDataModels, date, period);
             if (eodData != null && eodData.Adjusted_Close != null)
             {
-                IncomeStatementModel incomeStatementData = stockDataHelperService.GetIncomeStatement(incomeStatementModels,
-                    date, period);
+                //IncomeStatementModel incomeStatementData = stockDataHelperService.GetIncomeStatement(incomeStatementModels,
+                //    date, period);
                 OutstandingSharesModel outstandingShareData = stockDataHelperService.GetOutstandingSharesData(outstandingDataModels,
                     date, period);
-                if (incomeStatementData != null && incomeStatementData.TotalRevenue != null && outstandingShareData != null 
+                var totalRevenue = stockDataHelperService.GetTotalRevenuePerYearData(incomeStatementModels, date, period);
+                if (totalRevenue != null && outstandingShareData != null 
                     && outstandingShareData.Shares != null)
                 {
                     priceToSalesData.Add(date, (double)(
-                        eodData.Adjusted_Close / (incomeStatementData.TotalRevenue / outstandingShareData.Shares))
+                        eodData.Adjusted_Close / (totalRevenue / outstandingShareData.Shares))
                     );
                     continue;
                 }
@@ -542,16 +543,17 @@ public class StockDataService : IStockDataService
         var evEBITDAData = new Dictionary<string, double>();
         foreach (var date in dates)
         {
-            IncomeStatementModel incomeStatementData = stockDataHelperService.GetIncomeStatement(incomeStatementModels, date, period);
+            //IncomeStatementModel incomeStatementData = stockDataHelperService.GetIncomeStatement(incomeStatementModels, date, period);
+            var totalEbitda = stockDataHelperService.GetTotalEbitdaPerYearData(incomeStatementModels, date, period);
             BalanceSheetModel balanceSheetData = stockDataHelperService.GetBalanceSheetData(balanceSheetDataModels, date, period);
             var marketCap = marketCapData.FirstOrDefault(cap => cap.Key == date);
             if (balanceSheetData != null && balanceSheetData.LongTermDebt != null && balanceSheetData.ShortTermDebt != null &&
-                balanceSheetData.Cash != null && incomeStatementData != null && incomeStatementData.Ebitda != null)
+                balanceSheetData.Cash != null && totalEbitda != null)
             {
                 var ev = (double)(marketCap.Value + (balanceSheetData.LongTermDebt + balanceSheetData.ShortTermDebt)
                     - balanceSheetData.Cash);
 
-                evEBITDAData.Add(date, (double)(ev / incomeStatementData.Ebitda));
+                evEBITDAData.Add(date, (double)(ev / totalEbitda));
                 continue;
             }
             evEBITDAData.Add(date, 0);
@@ -574,16 +576,17 @@ public class StockDataService : IStockDataService
         var evSalesData = new Dictionary<string, double>();
         foreach (var date in dates)
         {
-            IncomeStatementModel incomeStatementData = stockDataHelperService.GetIncomeStatement(incomeStatementModels, date, period);
+            //IncomeStatementModel incomeStatementData = stockDataHelperService.GetIncomeStatement(incomeStatementModels, date, period);
+            var totalRevenue = stockDataHelperService.GetTotalRevenuePerYearData(incomeStatementModels, date, period);
             BalanceSheetModel balanceSheetData = stockDataHelperService.GetBalanceSheetData(balanceSheetDataModels, date, period);
             var marketCap = marketCapData.FirstOrDefault(cap => cap.Key == date);
 
             if (balanceSheetData != null && balanceSheetData.LongTermDebt != null && balanceSheetData.ShortTermDebt != null &&
-                balanceSheetData.Cash != null && incomeStatementData != null && incomeStatementData.TotalRevenue != null)
+                balanceSheetData.Cash != null && totalRevenue != null)
             {
                 var ev = (double)(marketCap.Value + (balanceSheetData.LongTermDebt + balanceSheetData.ShortTermDebt)
                     - balanceSheetData.Cash);
-                evSalesData.Add(date, (double)(ev / incomeStatementData.TotalRevenue));
+                evSalesData.Add(date, (double)(ev / totalRevenue));
                 continue;
             }
             evSalesData.Add(date, 0);
@@ -606,16 +609,17 @@ public class StockDataService : IStockDataService
         var evCFOData = new Dictionary<string, double>();
         foreach (var date in dates)
         {
-            CashFlowModel cashFlowData = stockDataHelperService.GetCashFlow(cashFlowModels, date, period);
+            //CashFlowModel cashFlowData = stockDataHelperService.GetCashFlow(cashFlowModels, date, period);
+            var totalCashFromOperatingActivites = stockDataHelperService.GetTotalCashFromOperatingActivitiesPerYearData(cashFlowModels, date, period);
             BalanceSheetModel balanceSheetData = stockDataHelperService.GetBalanceSheetData(balanceSheetDataModels, date, period);
             var marketCap = marketCapData.FirstOrDefault(cap => cap.Key == date);
 
             if (balanceSheetData != null && balanceSheetData.LongTermDebt != null && balanceSheetData.ShortTermDebt != null &&
-                balanceSheetData.Cash != null && cashFlowData != null && cashFlowData.TotalCashFromOperatingActivities != null)
+                balanceSheetData.Cash != null && totalCashFromOperatingActivites != null)
             {
                 var ev = (double)(marketCap.Value + (balanceSheetData.LongTermDebt + balanceSheetData.ShortTermDebt)
                     - balanceSheetData.Cash);
-                evCFOData.Add(date, (double)(ev / cashFlowData.TotalCashFromOperatingActivities));
+                evCFOData.Add(date, (double)(ev / totalCashFromOperatingActivites));
                 continue;
             }
             evCFOData.Add(date, 0);
